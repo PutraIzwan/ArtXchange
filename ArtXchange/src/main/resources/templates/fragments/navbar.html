@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="navbar" class="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/}" class="logo">ArtXchange</a>
+            <div class="nav-links">
+                <a th:href="@{/register}" class="nav-button">Register</a>
+                <a th:href="@{/login}" class="nav-button">Login</a>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

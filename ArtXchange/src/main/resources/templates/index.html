@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>ArtXchange - Discover Art</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Firebase SDK for auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/}" class="logo">ArtXchange</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search by artist, gallery, style, theme, etc.">
+            </div>
+            <div class="nav-links">
+                <a href="#">Artworks</a>
+                <a href="#">Galleries</a>
+                <a href="#">Events</a>
+                <a th:href="@{/login}" class="nav-button">Login</a>
+                <a th:href="@{/register}" class="nav-button signup">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your guide to the art world</h1>
+            <p>ArtXchange makes it easy to discover artists and artworks you'll love</p>
+            <div class="cta-buttons">
+                <a th:href="@{/register}" class="cta-button">Get Started</a>
+                <a href="#featured" class="cta-button secondary">Explore Art</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section id="featured" class="featured">
+        <h2>Featured</h2>
+        <div class="art-grid">
+            <!-- Dynamic content would go here -->
+            <div class="art-card" th:each="artwork : ${featuredArtworks}">
+                <img th:src="${artwork.imageUrl}" alt="Artwork">
+                <h3 th:text="${artwork.title}"></h3>
+                <p th:text="${artwork.artist}"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Initialize Firebase -->
+    <script th:inline="none">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        const firebaseConfig = {
+            apiKey: "AIzaSyA3HAYbnazr_bHlSIdVTshVeC26f1d71qI",
+            authDomain: "artxchange-a4df4.firebaseapp.com",
+            projectId: "artxchange-a4df4",
+            storageBucket: "artxchange-a4df4.appspot.com",
+            messagingSenderId: "453352605616",
+            appId: "1:453352605616:web:6fcabece2f676518853875"
+        };
+        firebase.initializeApp(firebaseConfig);
+        
+        // Check auth state to update UI
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                document.querySelectorAll('.nav-button').forEach(el => {
+                    el.textContent = 'My Profile';
+                    el.href = '/profile';
+                });
+            }
+        });
+    });
+    /*]]>*/
+    </script>
+</body>
+</html>

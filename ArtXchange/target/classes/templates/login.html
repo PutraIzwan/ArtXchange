@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - ArtXchange</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Load Firebase SDKs FIRST -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1>Login</h1>
+    <div th:if="${param.error}" class="alert error">
+        <span th:text="${param.error}"></span>
+    </div>
+
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="button" id="loginBtn">Login</button>
+    </form>
+</div>
+
+<!-- Initialize Firebase AFTER SDK is loaded -->
+<script th:inline="none">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyA3HAYbnazr_bHlSIdVTshVeC26f1d71qI",
+            authDomain: "artxchange-a4df4.firebaseapp.com",
+            projectId: "artxchange-a4df4",
+            storageBucket: "artxchange-a4df4.firebasestorage.app",
+            messagingSenderId: "453352605616",
+            appId: "1:453352605616:web:6fcabece2f676518853875"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Add event listener after Firebase is initialized
+        document.getElementById('loginBtn').addEventListener('click', login);
+    });
+
+    function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                return userCredential.user.getIdToken();
+            })
+            .then((idToken) => {
+                window.location.href = `/login-success?idToken=${encodeURIComponent(idToken)}`;
+            })
+            .catch((error) => {
+                console.error('Login error:', error);
+                window.location.href = `/login?error=${encodeURIComponent(error.message)}`;
+            });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>
